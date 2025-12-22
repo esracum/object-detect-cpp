@@ -1,6 +1,7 @@
 #include "objectdetect.h"
 #include "./ui_objectdetect.h"
 #include <QDebug>
+#include <QDateTime>
 
 
 
@@ -222,6 +223,24 @@ void ObjectDetect::nesneleriTani(cv::Mat &img) {
 
             // Yazı Rengi
             cv::putText(img, label, cv::Point(box.x, top), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0,0,0), 1);
+            // --- TERMİNAL LOG SİSTEMİ ---
+
+            // 1. Tarih ve Saati al (Örn: [14:35:12])
+            QString zaman = QDateTime::currentDateTime().toString("[HH:mm:ss]");
+
+            // 2. Mesajı Hazırla (Örn: [14:35:12] TESPIT: Personel (%85))
+            QString logMesaji = zaman + " TESPIT: " + QString::fromStdString(className) + " (%" + QString::number((int)(confidences[idx]*100)) + ")";
+
+            // 3. Listeye Ekle
+            ui->listWidget->addItem(logMesaji);
+
+            // 4. En alta otomatik kaydır (Terminal gibi aksın)
+            ui->listWidget->scrollToBottom();
+
+            // 5. RAM dolmasın diye eski kayıtları sil (Listede hep son 50 kayıt kalsın)
+            if(ui->listWidget->count() > 50) {
+                delete ui->listWidget->takeItem(0);
+            }
         }
 
         // --- HUD / NİŞANGAH
