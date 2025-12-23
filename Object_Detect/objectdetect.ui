@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1007</width>
-    <height>543</height>
+    <width>1131</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -22,60 +22,403 @@
     <height>0</height>
    </size>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::PreventContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>ObjectDetect - Yer Kontrol İstasyonu</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow { background-color: #2b2b2b; }</string>
+   <string notr="true">/* --- ANA PENCERE --- */
+QMainWindow {
+    background-color: #121212; /* Modern Dark Tema */
+}
+
+/* --- ÜST TAKIM (LCD SAYAÇLAR + TARİH) --- */
+QLCDNumber, QLabel#labelDate {
+    background-color: #0d1117;  /* YENİ: Listeyle AYNI arka plan rengi */
+    color: #ff3333;             /* YAZI: Kırmızı (Aynen kaldı) */
+    border: 1px solid #ff3333;  /* ÇERÇEVE: Kırmızı (Aynen kaldı) */
+    border-radius: 6px;         
+}
+
+/* --- TARİH KUTUSU ÖZEL AYAR --- */
+QLabel#labelDate {
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px; 
+}
+
+/* --- KAMERA ALANI --- */
+QLabel#labelKamera {
+    background-color: #000000; 
+    border: 2px solid #0000ff;  /* ÇERÇEVE: Kırmızı */
+    border-radius: 6px;
+}
+
+/* --- YAN LİSTE (LOG EKRANI - YEŞİL) --- */
+QListWidget {
+    background-color: #0d1117;  /* REFERANS RENGİMİZ BU */
+    color: #33ff33;             
+    border: 1px solid #33ff33;  
+    border-radius: 6px;
+    font-family: &quot;Consolas&quot;;
+    font-size: 11px;
+    outline: none;
+}
+
+/* --- SAYAÇ BAŞLIKLARI --- */
+QLabel {
+    color: #8b949e; 
+    font-family: &quot;Arial&quot;;
+    font-weight: bold;
+    font-size: 12px;
+    border: none;   
+    background-color: transparent;
+}
+
+/* --- BUTONLAR --- */
+QPushButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+/* Hover - KIRMIZI PARLAMA */
+QPushButton:hover {
+    background-color: rgba(255, 51, 51, 0.1); 
+}
+
+QPushButton:pressed {
+    color: #ffffff;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,1">
-    <item>
-     <widget class="QLabel" name="labelKamera">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: black; border: 1px solid #444;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListWidget" name="listWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #0d0d0d;      
-color: #33ff33;                
-border: 1px solid #004400;      
-font-family: &quot;Courier New&quot;;     
-font-weight: bold;            
-font-size: 11px;
-selection-background-color: #004400;</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <widget class="QLabel" name="labelKamera">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>791</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdArac">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>30</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdInsan">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>30</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdFPS">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>30</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="digitCount">
+     <number>4</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Flat</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelDate">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Consolas</family>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblArac">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>80</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ARAÇ</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblInsan">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>80</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>İNSAN</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblFPS">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>80</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>FPS</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>100</y>
+      <width>251</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>150</width>
+      <height>300</height>
+     </size>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="snapshot">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Liberation Sans</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../Downloads/camera.png</normaloff>../../../Downloads/camera.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRecord">
+    <property name="geometry">
+     <rect>
+      <x>872</x>
+      <y>21</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../Downloads/play.png</normaloff>../../../Downloads/play.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnEoir">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../Downloads/blur.png</normaloff>../../../Downloads/blur.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1007</width>
+     <width>1131</width>
      <height>22</height>
     </rect>
    </property>
